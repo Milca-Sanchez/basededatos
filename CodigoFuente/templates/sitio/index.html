@@ -1,0 +1,16 @@
+{% include 'sitio/cabecera.html' %}
+
+<div class="d-flex flex-column justify-content-center align-items-center vh-100 bg-light">
+    <!-- Imagen agregada aquí -->
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="200" height="auto" class="mb-4">
+
+    <div class="text-center">
+        <h1 class="display-3 text-primary">¡Bienvenidos!</h1>
+        <p class="lead">A la página de administración de "Marquesitas La Nueva Tradición"</p>
+        <button class="btn btn-primary mt-4" onclick="window.location.href='/login'">
+            INICIAR SESIÓN
+        </button>
+    </div>
+</div>
+
+{% include 'sitio/pie.html' %}

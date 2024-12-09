@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+{% include 'sitio/cabecera.html' %}
+
+<div class="container mt-4">
+    <h2>Administrar Empleados</h2>
+
+    <!-- Botones para generar reportes -->
+    <div class="mb-3">
+        <a href="/admin/generar_reporte_empleados" class="btn btn-info mb-3">Generar Reporte Empleados</a>
+        <a href="/admin/generar_reporte_turnos" class="btn btn-info mb-3">Generar Reporte Turnos</a>
+    </div>
+
+    <!-- Botón para añadir empleado -->
+    <button class="btn btn-primary mb-3" onclick="mostrarFormularioEmpleado('agregar')">Añadir Empleado</button>
+
+    <!-- Formulario para agregar o modificar empleado -->
+    <div id="formularioEmpleado" class="collapse">
+        <h4 id="formularioEmpleadoTitulo">Agregar Empleado</h4>
+        <form method="POST" action="/admin/empleados">
+            <input type="hidden" id="actionEmpleado" name="action" value="agregar">
+            <div class="mb-3">
+                <label for="rfc_emp" class="form-label">RFC Empleado</label>
+                <input type="text" class="form-control" id="rfc_emp" name="rfc_emp" required>
+            </div>
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+            </div>
+            <div class="mb-3">
+                <label for="puesto" class="form-label">Puesto</label>
+                <input type="text" class="form-control" id="puesto" name="puesto" required>
+            </div>
+            <div class="mb-3">
+                <label for="sueldo" class="form-label">Sueldo</label>
+                <input type="number" class="form-control" id="sueldo" name="sueldo" required>
+            </div>
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="telefono" name="telefono" required>
+            </div>
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </form>
+    </div>
+
+    <!-- Tabla de empleados -->
+    <div id="tablaEmpleados">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>RFC Empleado</th>
+                    <th>Nombre</th>
+                    <th>Puesto</th>
+                    <th>Sueldo</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for empleado in empleados %}
+                    <tr>
+                        <td>{{ empleado[0] }}</td>
+                        <td>{{ empleado[1] }}</td>
+                        <td>{{ empleado[2] }}</td>
+                        <td>{{ empleado[3] }}</td>
+                        <td>{{ empleado[4] }}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editarEmpleado('{{ empleado[0] }}', '{{ empleado[1] }}', '{{ empleado[2] }}', '{{ empleado[3] }}', '{{ empleado[4] }}')">Editar</button>
+                            <a href="/admin/empleados/eliminar/{{ empleado[0] }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que quieres eliminar este empleado?')">Borrar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Administrar Turnos</h2>
+
+    <!-- Botón para añadir turno -->
+    <button class="btn btn-primary mb-3" onclick="mostrarFormularioTurno('agregar')">Añadir Turno</button>
+
+    <!-- Formulario para agregar o modificar turno -->
+    <div id="formularioTurno" class="collapse">
+        <h4 id="formularioTurnoTitulo">Agregar Turno</h4>
+        <form method="POST" action="/admin/turnos">
+            <input type="hidden" id="actionTurno" name="action" value="agregar">
+            <div class="mb-3">
+                <label for="rfc_emp_turno" class="form-label">RFC Empleado</label>
+                <input type="text" class="form-control" id="rfc_emp_turno" name="rfc_emp" required>
+            </div>
+            <div class="mb-3">
+                <label for="turno" class="form-label">Turno</label>
+                <input type="text" class="form-control" id="turno" name="turno" required>
+            </div>
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </form>
+    </div>
+
+    <!-- Tabla de turnos -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>RFC Empleado</th>
+                <th>Turno</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for turno in turnos %}
+                <tr>
+                    <td>{{ turno[0] }}</td>
+                    <td>{{ turno[1] }}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editarTurno('{{ turno[0] }}', '{{ turno[1] }}')">Editar</button>
+                        <a href="/admin/turnos/eliminar/{{ turno[0] }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que quieres eliminar este turno?')">Borrar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        // Funciones existentes para manejar formularios de empleados y turnos
+    </script>
+
+
+    <!-- Formulario de agregar o editar turno -->
+    <div class="collapse mt-3" id="turnoForm">
+        <form method="POST" action="/admin/turnos">
+            <input type="hidden" name="action" value="modificar" id="actionField">
+            <div class="mb-3">
+                <label for="rfc_emp_turno" class="form-label">RFC Empleado</label>
+                <input type="text" class="form-control" id="rfc_emp_turno" name="rfc_emp" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="turno" class="form-label">Turno</label>
+                <input type="text" class="form-control" id="turno" name="turno" required>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitBtn">Modificar</button>
+            <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()">Cancelar</button>
+        </form>
+    </div>
+
+    <script>
+        function editarTurno(rfc_emp, turno) {
+            // Rellenar las barras de texto con los datos del turno seleccionado
+            document.getElementById('rfc_emp_turno').value = rfc_emp;  // RFC se pasa a este campo
+            document.getElementById('turno').value = turno;  // Turno a editar
+            // Cambiar el tipo de acción a modificar
+            document.getElementById('actionField').value = 'modificar';
+            // Cambiar el texto del botón de "Modificar"
+            document.getElementById('submitBtn').textContent = 'Guardar';
+            // Mostrar el formulario
+            document.getElementById('turnoForm').classList.remove('collapse');
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('rfc_emp_turno').value = '';
+            document.getElementById('turno').value = '';
+            document.getElementById('submitBtn').textContent = 'Agregar';
+            document.getElementById('turnoForm').classList.add('collapse');
+        }
+
+        // Función para mostrar formulario de empleados
+        function mostrarFormularioEmpleado(accion) {
+            document.getElementById('formularioEmpleado').classList.add('show');
+            document.getElementById('formularioEmpleadoTitulo').innerText = 'Agregar Empleado';
+            document.getElementById('actionEmpleado').value = 'agregar';
+            limpiarFormularioEmpleado();
+        }
+
+        // Función para editar empleado
+        function editarEmpleado(rfc_emp, nombre, puesto, sueldo, telefono) {
+            document.getElementById('formularioEmpleado').classList.add('show');
+            document.getElementById('formularioEmpleadoTitulo').innerText = 'Editar Empleado';
+            document.getElementById('actionEmpleado').value = 'modificar';
+            document.getElementById('rfc_emp').value = rfc_emp;
+            document.getElementById('nombre').value = nombre;
+            document.getElementById('puesto').value = puesto;
+            document.getElementById('sueldo').value = sueldo;
+            document.getElementById('telefono').value = telefono;
+        }
+
+        // Función para limpiar formulario de empleados
+        function limpiarFormularioEmpleado() {
+            document.getElementById('rfc_emp').value = '';
+            document.getElementById('nombre').value = '';
+            document.getElementById('puesto').value = '';
+            document.getElementById('sueldo').value = '';
+            document.getElementById('telefono').value = '';
+        }
+
+        // Función para mostrar formulario de turnos
+        function mostrarFormularioTurno(accion) {
+            document.getElementById('formularioTurno').classList.add('show');
+            document.getElementById('formularioTurnoTitulo').innerText = 'Agregar Turno';
+            document.getElementById('actionTurno').value = 'agregar';
+            limpiarFormularioTurno();
+        }
+
+        // Función para editar turno
+        function editarTurno(rfc_emp, turno) {
+            document.getElementById('formularioTurno').classList.add('show');
+            document.getElementById('formularioTurnoTitulo').innerText = 'Editar Turno';
+            document.getElementById('actionTurno').value = 'modificar';
+            document.getElementById('rfc_emp_turno').value = rfc_emp;
+            document.getElementById('turno').value = turno;
+        }
+
+        // Función para limpiar formulario de turnos
+        function limpiarFormularioTurno() {
+            document.getElementById('rfc_emp_turno').value = '';
+            document.getElementById('turno').value = '';
+        }
+    </script>
+
+{% include 'sitio/pie.html' %}
+</html>

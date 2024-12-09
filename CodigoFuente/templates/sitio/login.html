@@ -1,0 +1,24 @@
+{% include 'sitio/cabecera.html' %}
+
+<div class="d-flex flex-column justify-content-center align-items-center vh-100 bg-light">
+    <!-- Imagen centrada encima del formulario -->
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="200" height="auto" class="mb-4">
+
+    <!-- Tarjeta para iniciar sesión -->
+    <div class="card p-4 shadow-sm" style="width: 25rem;">
+        <h2 class="text-center text-primary mb-4">Iniciar Sesión</h2>
+        <form method="POST" action="/login">
+            <div class="mb-3">
+                <label for="username" class="form-label">Usuario</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Ingresa tu usuario" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+        </form>
+    </div>
+</div>
+
+{% include 'sitio/pie.html' %}
